@@ -33,4 +33,4 @@ build/
 .vscode/
 
 ### Kafka ###
-kafka_2.13-4.1.1
+/kafka_*/
