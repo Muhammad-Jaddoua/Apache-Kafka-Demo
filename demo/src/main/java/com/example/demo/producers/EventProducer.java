@@ -1,17 +1,36 @@
 package com.example.demo.producers;
 
-import org.apache.kafka.clients.producer.KafkaProducer;
+import com.example.demo.businessLogic.SuperInterestingEventGenerator;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-
-import java.util.Properties;
-
-import static org.springframework.core.io.support.PropertiesLoaderUtils.loadProperties;
 
 @Service
 public class EventProducer {
-    Properties config = loadProperties("kafka.properties");
+    private final KafkaTemplate<String, String> kafkaTemplate;
+    private static final String TOPIC = "LocalNews";
+    private volatile boolean schedulerEnabled = false;
 
+    public EventProducer(KafkaTemplate<String, String> kafkaTemplate) {
+        this.kafkaTemplate = kafkaTemplate;
+    }
 
-    private final KafkaProducer<String, String> producer = new KafkaProducer<>();
+    public void send(String topic, String message) {
+        kafkaTemplate.send(topic, message);
+    }
 
+    @Scheduled(fixedRate = 1000)
+    public void sendContinuous() {
+        if (schedulerEnabled) {
+            kafkaTemplate.send(TOPIC, SuperInterestingEventGenerator.getEvent());
+        }
+    }
+
+    public void setSchedulerEnabled(boolean enableState) {
+        this.schedulerEnabled = enableState;
+    }
+
+    public boolean isSchedulerEnabled() {
+        return schedulerEnabled;
+    }
 }
