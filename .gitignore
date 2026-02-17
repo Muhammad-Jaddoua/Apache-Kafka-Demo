@@ -1,0 +1,26 @@
+# Kafka installation and archive
+kafka_2.13-4.1.1/
+kafka_2.13-4.1.1.tgz
+kafka_*/
+*.tgz
+
+# Kafka logs and data
+**/logs/
+**/data/
+*.log
+
+# IDE
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Maven/Gradle build output
+target/
+build/
+
